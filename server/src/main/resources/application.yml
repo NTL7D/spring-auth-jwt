@@ -1,0 +1,19 @@
+server:
+  servlet:
+    context-path: ${SV_PREFIX}
+  port: ${SV_PORT}
+
+spring:
+  application:
+    name: ${SV_NAME}
+  datasource:
+    url: jdbc:postgresql://localhost:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+
+jwt:
+  secret: ${JWT_SECRET}
