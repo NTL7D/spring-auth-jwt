@@ -15,6 +15,6 @@ PG_PASS= pgadmin password
 PG_PORT= pgadmin port
 # jwt:
 JWT_SECRET= secret key to generate jwt token
-# (use node, and then paste: require("crypto").randomBytes(key length).toString("hex") to generate new key)
+# (in terminal, use node, require("crypto").randomBytes(key length).toString("hex"))
 
 ```
