@@ -30,26 +30,26 @@ public class AuthService {
 
         public AuthResponse login(LoginRequest request) {
                 authManager.authenticate(new UsernamePasswordAuthenticationToken(
-                                request.getUsername(), request.getPassword()));
+                                request.username(), request.password()));
 
-                User user = userRepository.findByUsername(request.getUsername())
+                User user = userRepository.findByUsername(request.username())
                                 .orElseThrow();
 
-                String token = jwtService.getToken(user);
+                AuthResponse response = new AuthResponse(jwtService.getToken(user));
 
-                return AuthResponse.builder().token(token).build();
+                return response;
         }
 
         public AuthResponse register(RegisterRequest request) {
                 User user = userMapper.toRegister(request);
-                user.setPassword(passwordEncoder.encode(request.getPassword()));
+                user.setPassword(passwordEncoder.encode(request.password()));
                 user.setRole(Role.USER);
 
                 userRepository.save(user);
 
-                return AuthResponse.builder()
-                                .token(jwtService.getToken(user))
-                                .build();
+                AuthResponse response = new AuthResponse(jwtService.getToken(user));
+
+                return response;
         }
 
 }

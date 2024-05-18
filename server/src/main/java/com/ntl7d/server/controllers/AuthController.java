@@ -25,20 +25,16 @@ public class AuthController {
 
     @PostMapping("login")
     public ApiResponse<AuthResponse> login(@RequestBody LoginRequest request) {
-        ApiResponse<AuthResponse> response = new ApiResponse<>();
-
-        response.setSuccess(true);
-        response.setResult(authService.login(request));
+        ApiResponse<AuthResponse> response = new ApiResponse<AuthResponse>(
+                true, null, authService.login(request));
 
         return response;
     }
 
     @PostMapping("register")
     public ApiResponse<AuthResponse> register(@RequestBody RegisterRequest request) {
-        ApiResponse<AuthResponse> response = new ApiResponse<>();
-
-        response.setSuccess(true);
-        response.setResult(authService.register(request));
+        ApiResponse<AuthResponse> response = new ApiResponse<AuthResponse>(
+                true, null, authService.register(request));
 
         return response;
     }
