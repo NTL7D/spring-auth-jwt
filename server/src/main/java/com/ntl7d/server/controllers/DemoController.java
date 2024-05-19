@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class DemoController {
 
     @GetMapping()
-    public String Hello() {
+    public String hello() {
         return "Hello from secure endpoint";
     }
 

@@ -20,24 +20,20 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
     @Value("${jwt.secret}")
-    private String SECRET_KEY;
+    private String secretKey;
 
     public String getToken(UserDetails user) {
         return getToken(new HashMap<>(), user);
     }
 
     private String getToken(Map<String, Object> extraClaims, UserDetails user) {
-        return Jwts.builder()
-                .claims(extraClaims)
-                .subject(user.getUsername())
+        return Jwts.builder().claims(extraClaims).subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-                .signWith(getKey())
-                .compact();
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)).signWith(getKey()).compact();
     }
 
     private SecretKey getKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -59,11 +55,7 @@ public class JwtService {
     }
 
     private Claims getAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        return Jwts.parser().verifyWith(getKey()).build().parseSignedClaims(token).getPayload();
     }
 
     public <T> T getClaims(String token, Function<Claims, T> claimsResolver) {

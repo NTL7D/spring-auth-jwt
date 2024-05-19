@@ -29,15 +29,12 @@ public class AuthService {
         UserMapper userMapper;
 
         public AuthResponse login(LoginRequest request) {
-                authManager.authenticate(new UsernamePasswordAuthenticationToken(
-                                request.username(), request.password()));
+                authManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(request.username(), request.password()));
 
-                User user = userRepository.findByUsername(request.username())
-                                .orElseThrow();
+                User user = userRepository.findByUsername(request.username()).orElseThrow();
 
-                AuthResponse response = new AuthResponse(jwtService.getToken(user));
-
-                return response;
+                return new AuthResponse(jwtService.getToken(user));
         }
 
         public AuthResponse register(RegisterRequest request) {
@@ -47,9 +44,7 @@ public class AuthService {
 
                 userRepository.save(user);
 
-                AuthResponse response = new AuthResponse(jwtService.getToken(user));
-
-                return response;
+                return new AuthResponse(jwtService.getToken(user));
         }
 
 }

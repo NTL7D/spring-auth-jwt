@@ -13,20 +13,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.ntl7d.server.repositories.UserRepository;
 
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 
 @Configuration
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AppConfig {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Bean
-    AuthenticationManager authManager(
-            AuthenticationConfiguration config) throws Exception {
+    AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
