@@ -12,7 +12,9 @@ import com.ntl7d.server.mappers.UserMapper;
 import com.ntl7d.server.models.Role;
 import com.ntl7d.server.models.User;
 import com.ntl7d.server.repositories.UserRepository;
-
+import com.ntl7d.server.utils.CookieUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -27,24 +29,58 @@ public class AuthService {
         PasswordEncoder passwordEncoder;
         AuthenticationManager authManager;
         UserMapper userMapper;
+        CookieUtils cookieUtils;
 
-        public AuthResponse login(LoginRequest request) {
-                authManager.authenticate(
-                                new UsernamePasswordAuthenticationToken(request.username(), request.password()));
+
+        public AuthResponse login(LoginRequest request, HttpServletResponse httpResponse) {
+                authManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(),
+                                request.password()));
 
                 User user = userRepository.findByUsername(request.username()).orElseThrow();
 
-                return new AuthResponse(jwtService.getToken(user));
+                String accessToken = jwtService.generateAccessToken(user);
+                String refreshToken = jwtService.generateRefreshToken(user);
+
+                cookieUtils.setAccessToken(accessToken, httpResponse);
+                cookieUtils.setRefreshToken(refreshToken, httpResponse);
+
+                return new AuthResponse(accessToken, refreshToken);
         }
 
-        public AuthResponse register(RegisterRequest request) {
+        public AuthResponse register(RegisterRequest request, HttpServletResponse httpResponse) {
                 User user = userMapper.toRegister(request);
                 user.setPassword(passwordEncoder.encode(request.password()));
                 user.setRole(Role.USER);
 
                 userRepository.save(user);
 
-                return new AuthResponse(jwtService.getToken(user));
+                String accessToken = jwtService.generateAccessToken(user);
+                String refreshToken = jwtService.generateRefreshToken(user);
+
+                cookieUtils.setAccessToken(accessToken, httpResponse);
+                cookieUtils.setRefreshToken(refreshToken, httpResponse);
+
+                return new AuthResponse(accessToken, refreshToken);
         }
+
+        public AuthResponse refresh(HttpServletRequest httpRequest) {
+                String refreshToken = cookieUtils.readCookie("refreshToken", httpRequest);
+
+                String username = jwtService.getUsernameFromToken(refreshToken);
+                User user = userRepository.findByUsername(username).orElseThrow();
+
+                if (jwtService.isTokenValid(refreshToken, user)) {
+                        String accessToken = jwtService.generateAccessToken(user);
+                        return new AuthResponse(accessToken, refreshToken);
+                }
+
+                return null;
+        }
+
+        public void logout(HttpServletResponse httpResponse) {
+                cookieUtils.clearCookie("accessToken", httpResponse);
+                cookieUtils.clearCookie("refreshToken", httpResponse);
+        }
+
 
 }
