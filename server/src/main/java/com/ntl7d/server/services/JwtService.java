@@ -22,26 +22,26 @@ public class JwtService {
     @Value("${spring.application.jwt.secret}")
     private String secretKey;
 
-    public String generateRefreshToken(UserDetails user) {
-        return generateRefreshToken(new HashMap<>(), user);
+    public String generateAccessToken(UserDetails user) {
+        return generateAccessToken(new HashMap<>(), user);
     }
 
-    public String generateAccessToken(UserDetails user) {
+    public String generateRefreshToken(UserDetails user) {
         return generateRefreshToken(new HashMap<>(), user);
     }
 
     public String generateAccessToken(Map<String, Object> extraClaims, UserDetails user) {
         return Jwts.builder().claims(extraClaims).subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 86400000)).signWith(getKey())
-                .compact();
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+                .signWith(getKey()).compact();
     }
 
     private String generateRefreshToken(Map<String, Object> extraClaims, UserDetails user) {
         return Jwts.builder().claims(extraClaims).subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 604800000)).signWith(getKey())
-                .compact();
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
+                .signWith(getKey()).compact();
     }
 
     private SecretKey getKey() {

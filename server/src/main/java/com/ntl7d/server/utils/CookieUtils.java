@@ -10,7 +10,7 @@ public class CookieUtils {
     public void setAccessToken(String token, HttpServletResponse httpResponse) {
         Cookie cookie = new Cookie("accessToken", token);
         cookie.setPath("/");
-        cookie.setMaxAge(86400000);
+        cookie.setMaxAge(60 * 60 * 24);
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
 
@@ -19,8 +19,8 @@ public class CookieUtils {
 
     public void setRefreshToken(String token, HttpServletResponse httpResponse) {
         Cookie cookie = new Cookie("refreshToken", token);
-        cookie.setPath("/auth/refresh");
-        cookie.setMaxAge(604800000);
+        cookie.setPath("/api/v1/auth/refresh");
+        cookie.setMaxAge(60 * 60 * 24 * 7);
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
 
