@@ -34,6 +34,7 @@ public class SecurityConfig {
                 return http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
                                 .authorizeHttpRequests(request -> request
                                                 .requestMatchers("/auth/**").permitAll()
+                                                .requestMatchers("/admin/**").hasRole("ADMIN")
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(
                                                 SessionCreationPolicy.STATELESS))
@@ -46,7 +47,6 @@ public class SecurityConfig {
         CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration config = new CorsConfiguration();
                 config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-                config.setAllowedHeaders(List.of("Authorization"));
                 config.setAllowCredentials(true);
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
                 source.registerCorsConfiguration("/**", config);

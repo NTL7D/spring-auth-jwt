@@ -19,7 +19,7 @@ public class CookieUtils {
 
     public void setRefreshToken(String token, HttpServletResponse httpResponse) {
         Cookie cookie = new Cookie("refreshToken", token);
-        cookie.setPath("/api/v1/auth/refresh");
+        cookie.setPath("/auth/refresh");
         cookie.setMaxAge(604800000);
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
@@ -39,9 +39,9 @@ public class CookieUtils {
         return null;
     }
 
-    public void clearCookie(String name, HttpServletResponse httpResponse) {
+    public void clearCookie(String name, String path, HttpServletResponse httpResponse) {
         Cookie cookie = new Cookie(name, null);
-        cookie.setPath("/");
+        cookie.setPath(path);
         cookie.setMaxAge(0);
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
@@ -49,4 +49,3 @@ public class CookieUtils {
         httpResponse.addCookie(cookie);
     }
 }
-

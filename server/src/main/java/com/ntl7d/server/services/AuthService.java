@@ -78,8 +78,8 @@ public class AuthService {
         }
 
         public void logout(HttpServletResponse httpResponse) {
-                cookieUtils.clearCookie("accessToken", httpResponse);
-                cookieUtils.clearCookie("refreshToken", httpResponse);
+                cookieUtils.clearCookie("accessToken", "/", httpResponse);
+                cookieUtils.clearCookie("refreshToken", "/auth/refresh", httpResponse);
         }
 
 
