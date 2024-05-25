@@ -12,14 +12,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.ntl7d.server.repositories.UserRepository;
-
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Configuration
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AppConfig {
 
-    private final UserRepository userRepository;
+    UserRepository userRepository;
 
     @Bean
     AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception {
