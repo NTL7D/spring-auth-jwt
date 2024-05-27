@@ -7,20 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class CookieUtils {
-    public void setAccessToken(String token, HttpServletResponse httpResponse) {
-        Cookie cookie = new Cookie("accessToken", token);
+    public void setJwtCookie(String token, HttpServletResponse httpResponse) {
+        Cookie cookie = new Cookie("jwt", token);
         cookie.setPath("/");
-        cookie.setMaxAge(60 * 60 * 24);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);
-
-        httpResponse.addCookie(cookie);
-    }
-
-    public void setRefreshToken(String token, HttpServletResponse httpResponse) {
-        Cookie cookie = new Cookie("refreshToken", token);
-        cookie.setPath("/api/v1/auth/refresh");
-        cookie.setMaxAge(60 * 60 * 24 * 7);
+        cookie.setMaxAge(7 * 24 * 60 * 60);
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
 

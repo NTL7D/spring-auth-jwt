@@ -41,8 +41,7 @@ public class AuthService {
                 String accessToken = jwtService.generateAccessToken(user);
                 String refreshToken = jwtService.generateRefreshToken(user);
 
-                cookieUtils.setAccessToken(accessToken, httpResponse);
-                cookieUtils.setRefreshToken(refreshToken, httpResponse);
+                cookieUtils.setJwtCookie(refreshToken, httpResponse);
 
                 return new AuthResponse(accessToken, refreshToken);
         }
@@ -57,14 +56,13 @@ public class AuthService {
                 String accessToken = jwtService.generateAccessToken(user);
                 String refreshToken = jwtService.generateRefreshToken(user);
 
-                cookieUtils.setAccessToken(accessToken, httpResponse);
-                cookieUtils.setRefreshToken(refreshToken, httpResponse);
+                cookieUtils.setJwtCookie(refreshToken, httpResponse);
 
                 return new AuthResponse(accessToken, refreshToken);
         }
 
         public AuthResponse refresh(HttpServletRequest httpRequest) {
-                String refreshToken = cookieUtils.readCookie("refreshToken", httpRequest);
+                String refreshToken = cookieUtils.readCookie("jwt", httpRequest);
 
                 String username = jwtService.getUsernameFromToken(refreshToken);
                 User user = userRepository.findByUsername(username).orElseThrow();
@@ -78,8 +76,7 @@ public class AuthService {
         }
 
         public void logout(HttpServletResponse httpResponse) {
-                cookieUtils.clearCookie("accessToken", "/", httpResponse);
-                cookieUtils.clearCookie("refreshToken", "/api/v1/auth/refresh", httpResponse);
+                cookieUtils.clearCookie("jwt", "/", httpResponse);
         }
 
 
