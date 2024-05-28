@@ -33,6 +33,7 @@ public class SecurityConfig {
                 return http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
                                 .authorizeHttpRequests(request -> request
                                                 .requestMatchers("/auth/**").permitAll()
+                                                .requestMatchers("/auth/refresh").authenticated()
                                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(

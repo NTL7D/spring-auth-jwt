@@ -43,7 +43,7 @@ public class AuthService {
 
                 cookieUtils.setJwtCookie(refreshToken, httpResponse);
 
-                return new AuthResponse(accessToken, refreshToken);
+                return new AuthResponse(accessToken);
         }
 
         public AuthResponse register(RegisterRequest request, HttpServletResponse httpResponse) {
@@ -58,7 +58,7 @@ public class AuthService {
 
                 cookieUtils.setJwtCookie(refreshToken, httpResponse);
 
-                return new AuthResponse(accessToken, refreshToken);
+                return new AuthResponse(accessToken);
         }
 
         public AuthResponse refresh(HttpServletRequest httpRequest) {
@@ -69,7 +69,7 @@ public class AuthService {
 
                 if (jwtService.isTokenValid(refreshToken, user)) {
                         String accessToken = jwtService.generateAccessToken(user);
-                        return new AuthResponse(accessToken, refreshToken);
+                        return new AuthResponse(accessToken);
                 }
 
                 return null;

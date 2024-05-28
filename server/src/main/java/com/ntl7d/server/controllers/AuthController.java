@@ -32,7 +32,7 @@ public class AuthController {
         ApiResponse<AuthResponse> response = new ApiResponse<>();
 
         response.setSuccess(true);
-        response.setResult(auth);
+        response.setData(auth);
 
         return response;
     }
@@ -43,7 +43,7 @@ public class AuthController {
         ApiResponse<AuthResponse> response = new ApiResponse<>();
 
         response.setSuccess(true);
-        response.setResult(authService.register(request, httpResponse));
+        response.setData(authService.register(request, httpResponse));
 
         return response;
     }
@@ -53,7 +53,7 @@ public class AuthController {
 
         ApiResponse<AuthResponse> response = new ApiResponse<>();
         response.setSuccess(true);
-        response.setResult(authService.refresh(httpRequest));
+        response.setData(authService.refresh(httpRequest));
 
         return response;
     }
